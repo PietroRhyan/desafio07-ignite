@@ -14,17 +14,43 @@ interface FormAddImageProps {
 export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState('');
   const [localImageUrl, setLocalImageUrl] = useState('');
+
   const toast = useToast();
+
+  const acceptedImageFormat = 
+    /(?:([^:/#])+):)?(?:([^/?#]*))?([^?#](?:jpeg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g
 
   const formValidations = {
     image: {
-      // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
+      required: 'Arquivo obrigatório',
+      validate: {
+        lessThan10MB: imageFiles => {
+          imageFiles[0].size < 10000000 || 'O arquivo deve ser menor que 10MB';
+        },
+        acceptedFormats: imageFiles => {
+          acceptedImageFormat.test(imageFiles[0].type) ||
+            'Somente são aceitos arquivos PNG, JPEG e GIF';
+        },
+      }
+
     },
     title: {
-      // TODO REQUIRED, MIN AND MAX LENGTH VALIDATIONS
+      required: 'Título obrigatório',
+      minLength: {
+        value: 2,
+        message: 'Mínimo de 2 caracteres',
+      },
+      maxLength: {
+        value: 20,
+        message: 'Máximo de 20 caracteres',
+      }, 
     },
     description: {
-      // TODO REQUIRED, MAX LENGTH VALIDATIONS
+      required: 'Descrição obrigatória',
+      maxLength: {
+        value: 65,
+        message: 'Máximo de 65 caracteres',
+      },
     },
   };
 
