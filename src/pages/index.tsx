@@ -23,9 +23,13 @@ interface GetFetchImages {
 
 export default function Home(): JSX.Element {
   async function getFetchImages({ pageParam = null}): Promise<GetFetchImages> {
-    const response = await api.get(`/api/images?after=${pageParam}`)
-    const data = response.data
+    const response = await api.get(`/api/images`, {
+      params: {
+        after: pageParam,
+      }
+    })
 
+    const data = response.data
     return data
   }
   
