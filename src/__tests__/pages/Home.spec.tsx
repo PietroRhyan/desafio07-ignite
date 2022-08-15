@@ -92,7 +92,7 @@ describe('Home page', () => {
     render(<Home />, { wrapper });
 
     expect(
-      await screen.findByText('Infelizmente ocorreu um erro =(')
+      await screen.findByText('Infelizmente ocorreu um erro')
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Clique aqui para tentar novamente' })

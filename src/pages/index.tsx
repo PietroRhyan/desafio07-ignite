@@ -1,6 +1,6 @@
 import { Button, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { useInfiniteQuery, UseInfiniteQueryOptions } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 
 import { Header } from '../components/Header';
 import { CardList } from '../components/CardList';
@@ -23,13 +23,12 @@ interface GetFetchImages {
 
 export default function Home(): JSX.Element {
   async function getFetchImages({ pageParam = null}): Promise<GetFetchImages> {
-    const response = await api.get(`/api/images`, {
+    const { data } = await api.get(`/api/images`, {
       params: {
         after: pageParam,
       }
     })
-
-    const data = response.data
+    
     return data
   }
   
@@ -59,7 +58,7 @@ export default function Home(): JSX.Element {
     return <Loading />
   }
 
-  if (isLoading && isError) {
+  if (!isLoading && isError) {
     return <Error />
   }
 
@@ -69,7 +68,18 @@ export default function Home(): JSX.Element {
 
       <Box maxW={1120} px={20} mx="auto" my={20}>
         <CardList cards={formattedData} />
-        {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
+
+        { hasNextPage && (
+          <Button
+            w='auto'
+            mt='2rem'
+            mx='auto'
+            display='flex'
+            alignItems='center'
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >{isFetchingNextPage ? "Carregando..." : "Carregar mais"}</Button>
+        )}
       </Box>
     </>
   );

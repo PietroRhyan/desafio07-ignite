@@ -62,7 +62,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
     async (image: ImageData) => {
       api.post('/api/images', {
         ...image,
-        imageUrl
+        url: imageUrl,
       })
     },
     {
@@ -88,6 +88,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
 
         return ;
       }
+      
       await mutation.mutateAsync(data)
       
       toast({
@@ -95,8 +96,6 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
         title: 'Imagem cadastrada',
         description: 'Sua imagem foi cadastrada com sucesso.'
       })
-
-
     } catch {
       toast({
         status: 'error',
